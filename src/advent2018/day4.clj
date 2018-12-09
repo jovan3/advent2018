@@ -50,13 +50,19 @@
   [(key item) (reduce + (map #(% :total) ((val item) :times)))])
 
 (defn most-frequent-sleeping-minute [sleep-data]
-  (first (first (sort-by val > (frequencies (flatten (map #(% :range) (sleep-data :times))))))))
+  (first (sort-by val > (frequencies (flatten (map #(% :range) (sleep-data :times)))))))
+
+(defn top-freq-sleep-minute [sleep-data]
+  (let [top-sleep-mins-per-id (apply hash-map (apply concat (map (fn [i] [(key i) (most-frequent-sleeping-minute (val i))]) sleep-data)))]
+    (first (sort-by #(last (val %)) > top-sleep-mins-per-id))))
 
 (defn day4 [input]
   (let [sleep-data (process-data (parse-input input))]
     (let [sleep-times (apply hash-map (flatten (map get-item-sleep-total sleep-data)))
           id-most-asleep (first (sort-by val > sleep-times))
-          minute-most-asleep (most-frequent-sleeping-minute (sleep-data (first id-most-asleep)))]
+          minute-most-asleep (first (most-frequent-sleeping-minute (sleep-data (first id-most-asleep))))]
       (println "ID with longest sleep time" (first id-most-asleep))
       (println "minute most asleep" minute-most-asleep)
-      (println "day 4 part 1" (* (str->int (subs (first id-most-asleep) 1)) minute-most-asleep)))))
+      (println "day 4 part 1" (* (str->int (subs (first id-most-asleep) 1)) minute-most-asleep)))
+    (let [top-freq-min (top-freq-sleep-minute sleep-data)]
+      (println "day 4 part 2" (* (str->int (subs (first top-freq-min) 1)) (first (last top-freq-min)))))))
