@@ -10,7 +10,7 @@
                                set
                                sort
                                vec))
-                               
+
 (defn remove-letter? [last-char next-char]
   (cond
     (or (nil? last-char) (nil? next-char)) false
@@ -37,20 +37,12 @@
   (filter #(and (not= % letter) (not= % (str/upper-case letter))) letter-seq))
 
 (defn find-minimum-length [input letters]
-  (loop [remaining-letters letters
-         minimum-letter nil
-         minimum-value (count input)]
-    (println remaining-letters (first remaining-letters) " ---- " minimum-letter ":" minimum-value)
-    (if (empty? remaining-letters)
-      [minimum-letter minimum-value]
-      (let [current-modified-input (remove-input-letter (first remaining-letters) input)
-            removed-letters (remove-letter-pairs current-modified-input)
-            current-letter-count (count removed-letters)]
-        (if (< current-letter-count minimum-value)
-          (recur (rest remaining-letters) (first remaining-letters) current-letter-count)
-          (recur (rest remaining-letters) minimum-letter minimum-value))))))
-  
+  (first (sort (pmap (fn [letter] (-> input
+                                      (#(remove-input-letter letter %))
+                                      remove-letter-pairs
+                                      count)) letters))))
+
 (defn day5 [input]
   (let [letters (str/split input #"")]
-    (println "day 5 part 1" (count (remove-letter-pairs letters)))
-    (println (println "day 5 part 2" (last (find-minimum-length letters (all-letters input)))))))
+    (comment (println "day 5 part 1" (count (remove-letter-pairs letters))))
+    (println (println "day 5 part 2" (find-minimum-length letters (all-letters input))))))
