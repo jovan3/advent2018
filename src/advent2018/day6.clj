@@ -52,6 +52,19 @@
 (defn max-convergent-area [convergent-areas]
   (second (first (sort-by second > convergent-areas))))
 
+(defn dist [point1 point2]
+  (let [[x1 y1] point1
+        [x2 y2] point2]
+    (+ (abs (- x1 x2)) (abs (- y1 y2)))))
+
+(defn sum-of-distances [point all-points]
+  (reduce + (map #(dist point %) all-points)))
+
+(defn part2 [input-points]
+  (for [x (range -100 500) y (range -100 500) :when (< (sum-of-distances [x y] input-points) 10000)]
+    [x y]))
+
 (defn day6 [input]
   (let [input-points (process-input input)]
-    (println "day 6 part 1" (max-convergent-area ((do-iterations 100 input-points) :convergent-areas)))))
+    (println "day 6 part 1" (max-convergent-area ((do-iterations 100 input-points) :convergent-areas)))
+    (println "day 6 part 2" (count (part2 input-points)))))
