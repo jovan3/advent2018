@@ -5,6 +5,7 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]]
   :plugins [[cider/cider-nrepl "0.15.1"]]
+  :jvm-opts ["-Xmx6g"]
   :main advent2018.core)
 
 
