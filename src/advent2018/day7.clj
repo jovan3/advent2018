@@ -34,5 +34,7 @@
           (recur next-node (set (remove #{next-node} next-nodes)) (conj result next-node)))))))
 
 (defn day7 [input]
-  (let [graph (apply uber/digraph (process-input input))]
-    (println "day 7 part 1" (str/join "" (traverse-graph graph "S")))))
+  (let [processed-input (process-input input)
+        graph (apply uber/digraph processed-input)
+        start-node (first (first processed-input))]
+    (println "day 7 part 1" (str/join "" (traverse-graph graph start-node)))))
