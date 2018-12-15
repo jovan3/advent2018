@@ -25,13 +25,13 @@
 (defn traverse-graph [graph start-node]
   (loop [current-node start-node
          available #{}
-         visited #{start-node}
          result [start-node]]
-    (let [next-nodes (next-nodes graph current-node available visited)]
+    (let [visited (set result)
+          next-nodes (next-nodes graph current-node available visited)]
       (if (empty? next-nodes)
         result
         (let [next-node (first next-nodes)]
-          (recur next-node (set (remove #{next-node} next-nodes)) (conj visited next-node) (conj result next-node)))))))
+          (recur next-node (set (remove #{next-node} next-nodes)) (conj result next-node)))))))
 
 (defn day7 [input]
   (let [graph (apply uber/digraph (process-input input))]
